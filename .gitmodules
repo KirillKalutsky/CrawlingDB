@@ -1,0 +1,3 @@
+[submodule "CoreModels"]
+	path = CoreModels
+	url = https://github.com/KirillKalutsky/CoreModels
