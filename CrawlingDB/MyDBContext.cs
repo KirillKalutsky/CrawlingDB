@@ -107,5 +107,21 @@ namespace DB
                 .ToListAsync();
         }
 
+        public async Task<IEnumerable<District>> GetDistrictsAsync()
+        {
+            return await Districts.Include(d => d.Addresses).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Address>> GetAddressesAsync()
+        {
+            return await Addresses.Include(adr => adr.District).ToListAsync();
+        }
+
+        public async Task<List<Event>> GetEventsByDistrictLocationAsync(string districtName)
+        {
+            return await Events
+                .Where(ev => ev.District.DistrictName == districtName)
+                .ToListAsync();
+        }
     }
 }
