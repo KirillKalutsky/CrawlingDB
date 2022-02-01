@@ -18,5 +18,6 @@ namespace DB
         Task AddEventAsync(Event ev);
         Task<District> GetDistrictByNameAsync(string name);
         Task<List<Event>> GetAllEventsAsync();
+        Task SaveAllChangesAsync();
     }
 }

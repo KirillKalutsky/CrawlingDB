@@ -123,5 +123,10 @@ namespace DB
                 .Where(ev => ev.District.DistrictName == districtName)
                 .ToListAsync();
         }
+
+        public async Task SaveAllChangesAsync()
+        {
+            await SaveChangesAsync();
+        }
     }
 }
