@@ -40,8 +40,9 @@ namespace DB
                 .WithOne(a => a.District);
 
             modelBuilder.Entity<Event>()
-               .HasOne(ev => ev.District)
-               .WithMany(d => d.Events);
+               .HasOne<District>()
+               .WithMany(d => d.Events)
+               .HasForeignKey(e=>e.DistrictName);
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -54,7 +55,7 @@ namespace DB
         }
         public async Task<List<Event>> GetAllEventsAsync()
         {
-            return await Events.Include(ev => ev.District).ToListAsync();
+            return await Events.ToListAsync();
         }
 
         public async Task<IEnumerable<District>> GetDIstrictsWithAddresses()
@@ -103,7 +104,7 @@ namespace DB
         public async Task<List<Event>> GetEventsByDistrictLocation(string districtName)
         {
             return await Events
-                .Where(ev => ev.District.DistrictName == districtName)
+                .Where(ev => ev.DistrictName == districtName)
                 .ToListAsync();
         }
 
@@ -120,7 +121,7 @@ namespace DB
         public async Task<List<Event>> GetEventsByDistrictLocationAsync(string districtName)
         {
             return await Events
-                .Where(ev => ev.District.DistrictName == districtName)
+                .Where(ev => ev.DistrictName == districtName)
                 .ToListAsync();
         }
 
