@@ -19,5 +19,6 @@ namespace DB
         Task<District> GetDistrictByNameAsync(string name);
         Task<List<Event>> GetAllEventsAsync();
         Task SaveAllChangesAsync();
+        Task<List<Source>> GetSourcesForCrawlingAsync();
     }
 }

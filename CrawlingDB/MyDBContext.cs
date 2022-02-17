@@ -84,7 +84,10 @@ namespace DB
 
         public async Task<List<Source>> GetSourcesAsync()
         {
-            return await Sources.Include(source=>source.Fields).Include(source =>source.Events).ToListAsync();
+            return await Sources
+                .Include(source=>source.Fields)
+                .Include(source =>source.Events)
+                .ToListAsync();
         }
 
         public async Task<List<Event>> GetLastEventsByTimeAsync(DateTime minDateTime, DateTime maxDateTime)
@@ -128,6 +131,15 @@ namespace DB
         public async Task SaveAllChangesAsync()
         {
             await SaveChangesAsync();
+        }
+
+        public async Task<List<Source>> GetSourcesForCrawlingAsync()
+        {
+            return await Sources
+                .Include(source => source.Fields)
+                .Include(source => source.Events
+                    .OrderBy(x => x.DateOfDownload).LastOrDefault())
+                .ToListAsync();
         }
     }
 }
