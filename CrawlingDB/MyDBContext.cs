@@ -31,9 +31,10 @@ namespace DB
                 .WithOne(f => f.Source)
                 .HasForeignKey<SourceFields>(x => x.SourceId);
 
-            modelBuilder.Entity<Source>()
-                .HasMany(s => s.Events)
-                .WithOne(e => e.Source);
+            modelBuilder.Entity<Event>()
+                .HasOne<Source>()
+                .WithMany(s => s.Events)
+                .HasForeignKey(e => e.IdSource);
 
             modelBuilder.Entity<District>()
                 .HasMany(d => d.Addresses)
