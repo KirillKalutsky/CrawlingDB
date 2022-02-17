@@ -138,7 +138,7 @@ namespace DB
             return await Sources
                 .Include(source => source.Fields)
                 .Include(source => source.Events
-                    .OrderBy(x => x.DateOfDownload).LastOrDefault())
+                    .OrderBy(x => x.DateOfDownload).Take(1))
                 .ToListAsync();
         }
     }
