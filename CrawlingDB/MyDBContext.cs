@@ -142,5 +142,25 @@ namespace DB
                     .OrderBy(x => x.DateOfDownload).Take(1))
                 .ToListAsync();
         }
+
+        public Task<bool> SourcesIsEmptyAsync()
+        {
+            return Task.Run(() => !Sources.Any());
+        }
+
+        public Task<bool> LocationsIsEmptyAsync()
+        {
+            return Task.Run(() => !(Addresses.Any() && Districts.Any()));
+        }
+
+        public async Task AddAddressAsync(Address address)
+        {
+            await Addresses.AddAsync(address);
+        }
+
+        public async Task AddDistrictAsync(District district)
+        {
+            await Districts.AddAsync(district);
+        }
     }
 }

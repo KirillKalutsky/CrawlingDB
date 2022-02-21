@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "FZNWPWli2WXdkOpmbu58u/2tmqmP3naKNW0Kr4F2/HH+G2v84yYhPTRUKlKu+wR51Px+tzcGSMJz5RAwUCRs0A==",
+  "dgSpecHash": "UidnEPM+WKcG98vrHl5YfaO3C4N/hFAF7a7Jy2vB/8WM/wOu/jSdOvvut41Xrp43bqBzeQh9/1FHz6wKxGtzoQ==",
   "success": true,
   "projectFilePath": "D:\\ВКР\\Soft\\CrawlingDB\\CrawlingDB\\CrawlingDB.csproj",
   "expectedPackageFiles": [
@@ -23,8 +23,7 @@
     "C:\\Users\\Asus\\.nuget\\packages\\system.collections.immutable\\5.0.0\\system.collections.immutable.5.0.0.nupkg.sha512",
     "C:\\Users\\Asus\\.nuget\\packages\\system.componentmodel.annotations\\5.0.0\\system.componentmodel.annotations.5.0.0.nupkg.sha512",
     "C:\\Users\\Asus\\.nuget\\packages\\system.diagnostics.diagnosticsource\\5.0.0\\system.diagnostics.diagnosticsource.5.0.0.nupkg.sha512",
-    "C:\\Users\\Asus\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\4.6.0\\system.runtime.compilerservices.unsafe.4.6.0.nupkg.sha512",
-    "C:\\Users\\Asus\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\5.0.0\\microsoft.windowsdesktop.app.ref.5.0.0.nupkg.sha512"
+    "C:\\Users\\Asus\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\4.6.0\\system.runtime.compilerservices.unsafe.4.6.0.nupkg.sha512"
   ],
   "logs": []
 }

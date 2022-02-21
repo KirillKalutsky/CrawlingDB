@@ -20,5 +20,11 @@ namespace DB
         Task<List<Event>> GetAllEventsAsync();
         Task SaveAllChangesAsync();
         Task<List<Source>> GetSourcesForCrawlingAsync();
+        Task<bool> SourcesIsEmptyAsync();
+        Task<bool> LocationsIsEmptyAsync();
+        Task AddSourceAsync(Source source);
+        Task AddAddressAsync(Address address);
+        Task AddDistrictAsync(District district);
+
     }
 }
