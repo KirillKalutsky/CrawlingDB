@@ -103,6 +103,7 @@ namespace DB
         {
             var addreses = await Addresses
                 .Include(adr => adr.District)
+                .OrderBy(adr => adr.AddressName)
                 .ToListAsync();
             return CreatePageList(addreses, pageNumber, pageSize);
         }
@@ -111,6 +112,7 @@ namespace DB
         {
             var events = await Events
                 .Where(ev => ev.DistrictName == districtName)
+                .OrderBy(ev => ev.DateOfDownload)
                 .ToListAsync();
             return CreatePageList(events, pageNumber, pageSize);
         }
@@ -119,6 +121,7 @@ namespace DB
         {
             var events = await Events
                 .Where(ev => ev.DateOfDownload >= minDateTime)
+                .OrderBy(ev => ev.DateOfDownload)
                 .ToListAsync();
             return CreatePageList(events, pageNumber, pageSize);
         }
@@ -126,14 +129,18 @@ namespace DB
         public async Task<PageList<Event>> GetLastEventsByTimeAsync(DateTime minDateTime, DateTime maxDateTime, int pageNumber, int pageSize)
         {
             var events = await Events
-                .Where(ev => ev.DateOfDownload >= minDateTime && ev.DateOfDownload <= maxDateTime)
+                .Where(ev => ev.DateOfDownload >= minDateTime 
+                    && ev.DateOfDownload <= maxDateTime)
+                .OrderBy(ev => ev.DateOfDownload)
                 .ToListAsync();
             return CreatePageList(events, pageNumber, pageSize);
         }
 
         public async Task<PageList<Event>> GetEventsAsync(int pageNumber, int pageSize)
         {
-            var events = await Events.ToListAsync();
+            var events = await Events
+                .OrderBy(ev => ev.DateOfDownload)
+                .ToListAsync();
             return CreatePageList(events, pageNumber, pageSize);
         }
 
@@ -142,7 +149,8 @@ namespace DB
             var sources = await Sources
                .Include(source => source.Fields)
                .Include(source => source.Events
-                   .OrderBy(x => x.DateOfDownload).Take(1))
+                   .OrderBy(ev => ev.DateOfDownload).Take(1))
+               .OrderBy(source => source.Id)
                .ToListAsync();
             return CreatePageList(sources, pageNumber, pageSize);
         }
@@ -152,7 +160,9 @@ namespace DB
             var events = Sources
                 .Include(source => source.Events)
                 .Where(source => source.Id == sourceId)
-                .SingleOrDefault().Events;
+                .SingleOrDefault()
+                .Events
+                .OrderBy(ev => ev.DateOfDownload);
             return Task.Run(()=>CreatePageList(events, pageNumber, pageSize));
         }
 
@@ -161,7 +171,9 @@ namespace DB
             var events = Districts
                 .Include(distr => distr.Events)
                 .Where(distr => distr.DistrictName == districtName)
-                .SingleOrDefault().Events;
+                .SingleOrDefault()
+                .Events
+                .OrderBy(ev => ev.DateOfDownload);
             return Task.Run(()=>CreatePageList(events, pageNumber, pageSize));
         }
 
