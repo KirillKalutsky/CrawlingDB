@@ -54,25 +54,8 @@ namespace DB
         {
             await Sources.AddAsync(source);
         }
-        public async Task<List<Event>> GetAllEventsAsync()
-        {
-            return await Events.ToListAsync();
-        }
 
-        public async Task<IEnumerable<District>> GetDIstrictsWithAddresses()
-        {
-            return await Districts.Include(d => d.Addresses)
-                .ToListAsync();
-        }
-
-        public async Task<District> GetDistrictByNameAsync(string name)
-        {
-            var district = await Districts
-                .Include(distr => distr.Events)
-                .Where(distr => distr.DistrictName == name)
-                .FirstOrDefaultAsync();
-            return district;
-        }
+        
         public async Task AddEventAsync(Event ev)
         {
             Debug.Print("Add Event");
@@ -83,64 +66,9 @@ namespace DB
             Debug.Print("Succes Add Event");
         }
 
-        public async Task<List<Source>> GetSourcesAsync()
-        {
-            return await Sources
-                .Include(source=>source.Fields)
-                .Include(source =>source.Events)
-                .ToListAsync();
-        }
-
-        public async Task<List<Event>> GetLastEventsByTimeAsync(DateTime minDateTime, DateTime maxDateTime)
-        {
-            return await Events
-                .Where(ev => ev.DateOfDownload >= minDateTime && ev.DateOfDownload <= maxDateTime)
-                .ToListAsync();
-        }
-
-        public async Task<List<Event>> GetEventsByPeriodTimeAsync(DateTime minDateTime)
-        {
-            return await Events
-                .Where(ev => ev.DateOfDownload >= minDateTime)
-                .ToListAsync();
-        }
-
-        public async Task<List<Event>> GetEventsByDistrictLocation(string districtName)
-        {
-            return await Events
-                .Where(ev => ev.DistrictName == districtName)
-                .ToListAsync();
-        }
-
-        public async Task<IEnumerable<District>> GetDistrictsAsync()
-        {
-            return await Districts.Include(d => d.Addresses).ToListAsync();
-        }
-
-        public async Task<IEnumerable<Address>> GetAddressesAsync()
-        {
-            return await Addresses.Include(adr => adr.District).ToListAsync();
-        }
-
-        public async Task<List<Event>> GetEventsByDistrictLocationAsync(string districtName)
-        {
-            return await Events
-                .Where(ev => ev.DistrictName == districtName)
-                .ToListAsync();
-        }
-
         public async Task SaveAllChangesAsync()
         {
             await SaveChangesAsync();
-        }
-
-        public async Task<List<Source>> GetSourcesForCrawlingAsync()
-        {
-            return await Sources
-                .Include(source => source.Fields)
-                .Include(source => source.Events
-                    .OrderBy(x => x.DateOfDownload).Take(1))
-                .ToListAsync();
         }
 
         public Task<bool> SourcesIsEmptyAsync()
@@ -162,5 +90,89 @@ namespace DB
         {
             await Districts.AddAsync(district);
         }
+
+        public async Task<PageList<District>> GetDistrictsAsync(int pageNumber, int pageSize)
+        {
+            var districts = await Districts
+                .Include(d => d.Addresses)
+                .ToListAsync();
+            return CreatePageList(districts, pageNumber, pageSize);
+        }
+
+        public async Task<PageList<Address>> GetAddressesAsync(int pageNumber, int pageSize)
+        {
+            var addreses = await Addresses
+                .Include(adr => adr.District)
+                .ToListAsync();
+            return CreatePageList(addreses, pageNumber, pageSize);
+        }
+
+        public async Task<PageList<Event>> GetwDistrictEventsAsync(string districtName, int pageNumber, int pageSize)
+        {
+            var events = await Events
+                .Where(ev => ev.DistrictName == districtName)
+                .ToListAsync();
+            return CreatePageList(events, pageNumber, pageSize);
+        }
+
+        public async Task<PageList<Event>> GetEventsByPeriodTimeAsync(DateTime minDateTime, int pageNumber, int pageSize)
+        {
+            var events = await Events
+                .Where(ev => ev.DateOfDownload >= minDateTime)
+                .ToListAsync();
+            return CreatePageList(events, pageNumber, pageSize);
+        }
+
+        public async Task<PageList<Event>> GetLastEventsByTimeAsync(DateTime minDateTime, DateTime maxDateTime, int pageNumber, int pageSize)
+        {
+            var events = await Events
+                .Where(ev => ev.DateOfDownload >= minDateTime && ev.DateOfDownload <= maxDateTime)
+                .ToListAsync();
+            return CreatePageList(events, pageNumber, pageSize);
+        }
+
+        public async Task<PageList<Event>> GetEventsAsync(int pageNumber, int pageSize)
+        {
+            var events = await Events.ToListAsync();
+            return CreatePageList(events, pageNumber, pageSize);
+        }
+
+        public async Task<PageList<Source>> GetSourcesForCrawlingAsync(int pageNumber, int pageSize)
+        {
+            var sources = await Sources
+               .Include(source => source.Fields)
+               .Include(source => source.Events
+                   .OrderBy(x => x.DateOfDownload).Take(1))
+               .ToListAsync();
+            return CreatePageList(sources, pageNumber, pageSize);
+        }
+
+        public Task<PageList<Event>> GetSourceEventsAsync(int sourceId, int pageNumber, int pageSize)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<PageList<Event>> GetDistrictEventsAsync(int districtId, int pageNumber, int pageSize)
+        {
+            throw new NotImplementedException();
+        }
+
+        private PageList<T> CreatePageList<T>(IEnumerable<T> collect, int pageNumber, int pageSize)
+        {
+            if (pageNumber < 1)
+                pageNumber = 1;
+
+            if (pageSize < 1)
+                pageSize = 100;
+
+            return new PageList<T>
+            (
+                collect.Skip(pageNumber - 1 * pageSize).Take(pageSize).ToList(),
+                collect.Count(),
+                pageNumber,
+                pageSize
+            );
+        }
+
     }
 }

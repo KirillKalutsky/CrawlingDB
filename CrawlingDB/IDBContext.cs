@@ -9,17 +9,16 @@ namespace DB
 {
     public interface IDBContext
     {
-        Task<IEnumerable<District>> GetDistrictsAsync();
-        Task<IEnumerable<Address>> GetAddressesAsync();
-        Task<List<Event>> GetEventsByDistrictLocationAsync(string districtName);
-        Task<List<Event>> GetEventsByPeriodTimeAsync(DateTime minDateTime);
-        Task<List<Event>> GetLastEventsByTimeAsync(DateTime minDateTime, DateTime maxDateTime);
-        Task<List<Source>> GetSourcesAsync();
+        Task<PageList<District>> GetDistrictsAsync(int pageNumber, int pageSize);
+        Task<PageList<Address>> GetAddressesAsync(int pageNumber, int pageSize);
+        Task<PageList<Event>> GetEventsByPeriodTimeAsync(DateTime minDateTime, int pageNumber, int pageSize);
+        Task<PageList<Event>> GetLastEventsByTimeAsync(DateTime minDateTime, DateTime maxDateTime, int pageNumber, int pageSize);
         Task AddEventAsync(Event ev);
-        Task<District> GetDistrictByNameAsync(string name);
-        Task<List<Event>> GetAllEventsAsync();
+        Task<PageList<Event>> GetSourceEventsAsync(int sourceId, int pageNumber, int pageSize);
+        Task<PageList<Event>> GetDistrictEventsAsync(int districtId, int pageNumber, int pageSize);
+        Task<PageList<Event>> GetEventsAsync(int pageNumber, int pageSize);
         Task SaveAllChangesAsync();
-        Task<List<Source>> GetSourcesForCrawlingAsync();
+        Task<PageList<Source>> GetSourcesForCrawlingAsync(int pageNumber, int pageSize);
         Task<bool> SourcesIsEmptyAsync();
         Task<bool> LocationsIsEmptyAsync();
         Task AddSourceAsync(Source source);
