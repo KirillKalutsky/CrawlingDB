@@ -149,12 +149,20 @@ namespace DB
 
         public Task<PageList<Event>> GetSourceEventsAsync(int sourceId, int pageNumber, int pageSize)
         {
-            throw new NotImplementedException();
+            var events = Sources
+                .Include(source => source.Events)
+                .Where(source => source.Id == sourceId)
+                .SingleOrDefault().Events;
+            return Task.Run(()=>CreatePageList(events, pageNumber, pageSize));
         }
 
-        public Task<PageList<Event>> GetDistrictEventsAsync(int districtId, int pageNumber, int pageSize)
+        public Task<PageList<Event>> GetDistrictEventsAsync(string districtName, int pageNumber, int pageSize)
         {
-            throw new NotImplementedException();
+            var events = Districts
+                .Include(distr => distr.Events)
+                .Where(distr => distr.DistrictName == districtName)
+                .SingleOrDefault().Events;
+            return Task.Run(()=>CreatePageList(events, pageNumber, pageSize));
         }
 
         private PageList<T> CreatePageList<T>(IEnumerable<T> collect, int pageNumber, int pageSize)

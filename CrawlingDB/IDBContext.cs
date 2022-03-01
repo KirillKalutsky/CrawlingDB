@@ -15,7 +15,7 @@ namespace DB
         Task<PageList<Event>> GetLastEventsByTimeAsync(DateTime minDateTime, DateTime maxDateTime, int pageNumber, int pageSize);
         Task AddEventAsync(Event ev);
         Task<PageList<Event>> GetSourceEventsAsync(int sourceId, int pageNumber, int pageSize);
-        Task<PageList<Event>> GetDistrictEventsAsync(int districtId, int pageNumber, int pageSize);
+        Task<PageList<Event>> GetDistrictEventsAsync(string districtName, int pageNumber, int pageSize);
         Task<PageList<Event>> GetEventsAsync(int pageNumber, int pageSize);
         Task SaveAllChangesAsync();
         Task<PageList<Source>> GetSourcesForCrawlingAsync(int pageNumber, int pageSize);
