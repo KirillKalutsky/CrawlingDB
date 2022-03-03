@@ -1,4 +1,4 @@
-﻿using System;
+﻿
 
 namespace CrawlingDB
 {
@@ -6,7 +6,7 @@ namespace CrawlingDB
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            
         }
     }
 }

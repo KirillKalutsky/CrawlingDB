@@ -11,8 +11,9 @@ namespace DB
     {
         Task<PageList<District>> GetDistrictsAsync(int pageNumber, int pageSize);
         Task<PageList<Address>> GetAddressesAsync(int pageNumber, int pageSize);
-        Task<PageList<Event>> GetEventsByPeriodTimeAsync(DateTime minDateTime, int pageNumber, int pageSize);
-        Task<PageList<Event>> GetLastEventsByTimeAsync(DateTime minDateTime, DateTime maxDateTime, int pageNumber, int pageSize);
+        Task<PageList<Event>> GetLastEventsByTimeAsync (DateTime minDateTime, int pageNumber, int pageSize);
+        Task<PageList<Event>> GetLastDistrictEventsByTimeAsync(string districtName, DateTime lastDownload, int pageNumber, int pageSize);
+        Task<PageList<Event>> GetEventsByPeriodTimeAsync(DateTime minDateTime, DateTime maxDateTime, int pageNumber, int pageSize);
         Task AddEventAsync(Event ev);
         Task<PageList<Event>> GetSourceEventsAsync(int sourceId, int pageNumber, int pageSize);
         Task<PageList<Event>> GetDistrictEventsAsync(string districtName, int pageNumber, int pageSize);
@@ -24,6 +25,7 @@ namespace DB
         Task AddSourceAsync(Source source);
         Task AddAddressAsync(Address address);
         Task AddDistrictAsync(District district);
+        Task<bool> CheckDistrict(string districtName);
 
     }
 }

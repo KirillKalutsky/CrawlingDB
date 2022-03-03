@@ -117,7 +117,7 @@ namespace DB
             return CreatePageList(events, pageNumber, pageSize);
         }
 
-        public async Task<PageList<Event>> GetEventsByPeriodTimeAsync(DateTime minDateTime, int pageNumber, int pageSize)
+        public async Task<PageList<Event>> GetLastEventsByTimeAsync(DateTime minDateTime, int pageNumber, int pageSize)
         {
             var events = await Events
                 .Where(ev => ev.DateOfDownload >= minDateTime)
@@ -126,7 +126,7 @@ namespace DB
             return CreatePageList(events, pageNumber, pageSize);
         }
 
-        public async Task<PageList<Event>> GetLastEventsByTimeAsync(DateTime minDateTime, DateTime maxDateTime, int pageNumber, int pageSize)
+        public async Task<PageList<Event>> GetEventsByPeriodTimeAsync(DateTime minDateTime, DateTime maxDateTime, int pageNumber, int pageSize)
         {
             var events = await Events
                 .Where(ev => ev.DateOfDownload >= minDateTime 
@@ -194,5 +194,21 @@ namespace DB
             );
         }
 
+        public Task<PageList<Event>> GetLastDistrictEventsByTimeAsync(string districtName, DateTime lastDownload, int pageNumber, int pageSize)
+        {
+            var events = Events
+                .Where(ev => ev.DistrictName == districtName && ev.DateOfDownload > lastDownload)
+                .OrderBy(ev => ev.DateOfDownload);
+            return Task.Run(()=>CreatePageList(events, pageNumber, pageSize));
+        }
+
+        public async Task<bool> CheckDistrict(string districtName)
+        {
+            var district = await Districts
+                .Where(district => district.DistrictName == districtName)
+                .SingleOrDefaultAsync();
+
+            return district != null;
+        }
     }
 }
